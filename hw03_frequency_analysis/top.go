@@ -42,7 +42,7 @@ func Top10(text string) []string {
 	topBorder := TopCount
 	lenWordSlice := len(wordSlice)
 
-	if len(wordSlice) < TopCount {
+	if lenWordSlice < TopCount {
 		topBorder = lenWordSlice
 	}
 
