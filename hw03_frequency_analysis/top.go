@@ -13,12 +13,12 @@ type Word struct {
 }
 
 func Top10(text string) []string {
-	testSplit := strings.Fields(text)
+	textSplit := strings.Fields(text)
 	wordMap := make(map[string]int)
 	wordSlice := make([]Word, 0, TopCount)
 	result := make([]string, 0, TopCount)
 
-	for _, word := range testSplit {
+	for _, word := range textSplit {
 		_, ok := wordMap[word]
 
 		if ok {
