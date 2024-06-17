@@ -7,18 +7,33 @@ import (
 
 const TopCount = 10
 
+var (
+	PunctuationMarks = ".,-!?:;"
+	EmptyString      = ""
+)
+
 type Word struct {
 	Word string
 	Cnt  int
 }
 
-func Top10(text string) []string {
+func Top10(text string, taskWithAsteriskIsCompleted bool) []string {
 	textSplit := strings.Fields(text)
 	wordMap := make(map[string]int)
 	wordSlice := make([]Word, 0, TopCount)
 	result := make([]string, 0, TopCount)
 
 	for _, word := range textSplit {
+		if taskWithAsteriskIsCompleted {
+			word = strings.ToLower(word)
+			word = strings.TrimLeftFunc(word, TrimCallback)
+			word = strings.TrimRightFunc(word, TrimCallback)
+
+			if word == EmptyString {
+				continue
+			}
+		}
+
 		_, ok := wordMap[word]
 
 		if ok {
@@ -51,4 +66,8 @@ func Top10(text string) []string {
 	}
 
 	return result
+}
+
+func TrimCallback(r rune) bool {
+	return strings.ContainsRune(PunctuationMarks, r)
 }
