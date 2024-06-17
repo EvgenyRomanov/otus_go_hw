@@ -3,6 +3,7 @@ package hw02unpackstring
 import (
 	"errors"
 	"unicode"
+	"unicode/utf8"
 )
 
 var ErrInvalidString = errors.New("invalid string")
@@ -42,7 +43,7 @@ func Unpack(s string) (string, error) {
 			repeat := int(item - '0')
 
 			if repeat == 0 {
-				result = result[:len(result)-1]
+				result = result[:utf8.RuneCountInString(result)-1]
 				continue
 			}
 
