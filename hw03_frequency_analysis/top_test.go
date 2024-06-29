@@ -7,7 +7,7 @@ import (
 )
 
 // Change to true if needed.
-var taskWithAsteriskIsCompleted = false
+var taskWithAsteriskIsCompleted = true
 
 var text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
@@ -45,7 +45,7 @@ var text = `Как видите, он  спускается  по  лестни�
 
 func TestTop10(t *testing.T) {
 	t.Run("no words in empty string", func(t *testing.T) {
-		require.Len(t, Top10(""), 0)
+		require.Len(t, Top10("", taskWithAsteriskIsCompleted), 0)
 	})
 
 	t.Run("positive test", func(t *testing.T) {
@@ -62,7 +62,7 @@ func TestTop10(t *testing.T) {
 				"кристофер", // 4
 				"не",        // 4
 			}
-			require.Equal(t, expected, Top10(text))
+			require.Equal(t, expected, Top10(text, taskWithAsteriskIsCompleted))
 		} else {
 			expected := []string{
 				"он",        // 8
@@ -76,7 +76,27 @@ func TestTop10(t *testing.T) {
 				"не",        // 4
 				"то",        // 4
 			}
-			require.Equal(t, expected, Top10(text))
+			require.Equal(t, expected, Top10(text, taskWithAsteriskIsCompleted))
 		}
 	})
+}
+
+func TestTrimCallback(t *testing.T) {
+	tests := []struct {
+		input    rune
+		expected bool
+	}{
+		{input: '.', expected: true},
+		{input: '?', expected: true},
+		{input: '!', expected: true},
+		{input: 'a', expected: false},
+	}
+
+	for _, tc := range tests {
+		tc := tc
+		t.Run("test", func(t *testing.T) {
+			result := TrimCallback(tc.input)
+			require.Equal(t, tc.expected, result)
+		})
+	}
 }
