@@ -3,6 +3,7 @@ package hw05parallelexecution
 import (
 	"errors"
 	"sync"
+	"sync/atomic"
 )
 
 var ErrErrorsLimitExceeded = errors.New("errors limit exceeded")
@@ -14,17 +15,13 @@ func Run(tasks []Task, n, m int) error {
 	wg := sync.WaitGroup{}
 	defer wg.Wait()
 
-	mu := sync.Mutex{}
 	ch := make(chan struct{}, n)
-	cntErrors := 0
+	var cntErrors int64
 
 	for _, t := range tasks {
-		mu.Lock()
-		if cntErrors >= m && m >= 0 {
-			mu.Unlock()
+		if atomic.LoadInt64(&cntErrors) >= int64(m) && m >= 0 {
 			return ErrErrorsLimitExceeded
 		}
-		mu.Unlock()
 
 		wg.Add(1)
 		ch <- struct{}{}
@@ -36,12 +33,9 @@ func Run(tasks []Task, n, m int) error {
 			}()
 
 			err := t()
-
-			mu.Lock()
 			if err != nil {
-				cntErrors++
+				atomic.AddInt64(&cntErrors, 1)
 			}
-			mu.Unlock()
 		}(t)
 	}
 
