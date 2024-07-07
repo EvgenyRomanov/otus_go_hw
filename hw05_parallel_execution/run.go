@@ -14,29 +14,33 @@ type Task func() error
 func Run(tasks []Task, n, m int) error {
 	wg := sync.WaitGroup{}
 	defer wg.Wait()
+	tasksCh := make(chan Task, n)
+	defer close(tasksCh)
 
-	ch := make(chan struct{}, n)
 	var cntErrors int64
 
+	for i := 0; i < n; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+
+			for task := range tasksCh {
+				err := task()
+				if atomic.LoadInt64(&cntErrors) >= int64(m) && m >= 0 {
+					return
+				}
+				if err != nil {
+					atomic.AddInt64(&cntErrors, 1)
+				}
+			}
+		}()
+	}
+
 	for _, t := range tasks {
+		tasksCh <- t
 		if atomic.LoadInt64(&cntErrors) >= int64(m) && m >= 0 {
 			return ErrErrorsLimitExceeded
 		}
-
-		wg.Add(1)
-		ch <- struct{}{}
-
-		go func(t Task) {
-			defer func() {
-				<-ch
-				wg.Done()
-			}()
-
-			err := t()
-			if err != nil {
-				atomic.AddInt64(&cntErrors, 1)
-			}
-		}(t)
 	}
 
 	return nil
