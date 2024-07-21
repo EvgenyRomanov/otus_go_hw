@@ -11,7 +11,7 @@ import (
 
 func TestCopy(t *testing.T) {
 	// Place your code here.
-	for _, tcase := range [...]struct {
+	for _, tCase := range [...]struct {
 		in       string
 		out      string
 		expected string
@@ -61,15 +61,15 @@ func TestCopy(t *testing.T) {
 			limit:    1000,
 		},
 	} {
-		t.Run(fmt.Sprintf("test-%q", tcase.out), func(t *testing.T) {
-			f, _ := os.CreateTemp("", tcase.out)
+		t.Run(fmt.Sprintf("test-%q", tCase.out), func(t *testing.T) {
+			f, _ := os.CreateTemp("", tCase.out)
 			defer func(name string) {
 				_ = os.Remove(name)
 			}(f.Name())
 
-			_ = Copy(tcase.in, f.Name(), tcase.offset, tcase.limit)
+			_ = Copy(tCase.in, f.Name(), tCase.offset, tCase.limit)
 			out, _ := os.ReadFile(f.Name())
-			expected, _ := os.ReadFile(tcase.expected)
+			expected, _ := os.ReadFile(tCase.expected)
 
 			if !bytes.Equal(out, expected) {
 				t.Errorf("incoming file and outcomming file not matched")
