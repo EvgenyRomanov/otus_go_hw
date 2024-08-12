@@ -1,0 +1,11 @@
+goos: linux
+goarch: amd64
+pkg: github.com/EvgenyRomanov/otus_go_hw/hw10_program_optimization
+cpu: 11th Gen Intel(R) Core(TM) i5-1155G7 @ 2.50GHz
+BenchmarkGetDomainStat-8               3         467535077 ns/op        323240552 B/op   3045396 allocs/op
+BenchmarkGetDomainStat-8               3         460247148 ns/op        323253744 B/op   3045401 allocs/op
+BenchmarkGetDomainStat-8               3         583684413 ns/op        323252698 B/op   3045396 allocs/op
+BenchmarkGetDomainStat-8               3         475995463 ns/op        323302298 B/op   3045402 allocs/op
+BenchmarkGetDomainStat-8               3         462459486 ns/op        323302512 B/op   3045402 allocs/op
+PASS
+ok      github.com/EvgenyRomanov/otus_go_hw/hw10_program_optimization   14.466s
