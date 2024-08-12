@@ -84,11 +84,11 @@ func BenchmarkGetDomainStat(b *testing.B) {
 		b.StopTimer()
 
 		require.NoError(b, err)
-		require.Equal(b, expectedBizStatBench, stat)
+		require.Equal(b, expectedBizStatCopy, stat)
 	}
 }
 
-var expectedBizStatBench = DomainStat{
+var expectedBizStatCopy = DomainStat{
 	"abata.biz":         25,
 	"abatz.biz":         25,
 	"agimba.biz":        28,
