@@ -111,11 +111,13 @@ func Validate(v interface{}) error {
 				mu.Lock()
 				validationErrors = errHandler(err, validationErrors, field.Name)
 				mu.Unlock()
+
 			case reflect.Invalid, reflect.Bool, reflect.Uint, reflect.Uint8, reflect.Uint16,
 				reflect.Uint32, reflect.Uint64, reflect.Uintptr, reflect.Float32, reflect.Float64, reflect.Complex64,
 				reflect.Complex128, reflect.Array, reflect.Chan, reflect.Func, reflect.Interface, reflect.Map,
 				reflect.Pointer, reflect.UnsafePointer:
 				fallthrough
+
 			default:
 				return
 			}
@@ -320,6 +322,7 @@ func validateSlice(validationKey, validationValue, fieldName string, fieldValue 
 				})
 			}
 		}
+
 	case []string:
 		for _, elem := range field {
 			err := validateString(validationKey, validationValue, fieldName, elem)
@@ -334,6 +337,7 @@ func validateSlice(validationKey, validationValue, fieldName string, fieldValue 
 				})
 			}
 		}
+
 	default:
 		validateErrors = append(validateErrors, ValidationError{
 			Field: fieldName,
