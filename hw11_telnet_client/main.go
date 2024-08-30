@@ -6,6 +6,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
 
@@ -53,23 +54,40 @@ func StartTelnetClient(conn TelnetClient) error {
 
 	osSignalChan := make(chan os.Signal, 1)
 	signal.Notify(osSignalChan, syscall.SIGINT)
-
 	defer close(osSignalChan)
 
+	doneChan := make(chan struct{})
+
+	wg := sync.WaitGroup{}
+	defer wg.Wait()
+	wg.Add(2)
+
 	go func() {
+		defer wg.Done()
+
 		if err := conn.Send(); err != nil {
 			log.Println("Send error: ", err)
+			doneChan <- struct{}{}
 			return
 		}
 	}()
 
 	go func() {
+		defer wg.Done()
+
 		if err := conn.Receive(); err != nil {
 			log.Println("Receive error: ", err)
+			doneChan <- struct{}{}
 			return
 		}
 	}()
 
-	<-osSignalChan
-	return nil
+	for {
+		select {
+		case <-osSignalChan:
+			return nil
+		case <-doneChan:
+			return nil
+		}
+	}
 }
