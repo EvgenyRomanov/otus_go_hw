@@ -10,27 +10,47 @@ type Stage func(in In) (out Out)
 
 func ExecutePipeline(in In, done In, stages ...Stage) Out {
 	// Place your code here.
-	for _, stage := range stages {
-		tmpChan := make(Bi)
-
-		go func(in, done In) {
-			defer close(tmpChan)
-
-			for {
-				select {
-				case data, ok := <-in:
-					if !ok {
-						return
-					}
-					tmpChan <- data
-				case <-done:
-					return
-				}
-			}
-		}(in, done)
-
-		in = stage(tmpChan)
+	if in == nil {
+		return nil
 	}
 
-	return in
+	out := in
+	for _, stage := range stages {
+		out = executeStage(stage(out), done)
+	}
+
+	return out
+}
+
+func executeStage(in In, done In) Out {
+	out := make(Bi)
+
+	go func() {
+		defer func() {
+			close(out)
+			for len(in) > 0 {
+				<-in
+			}
+		}()
+
+		for data := range in {
+			if isTerminated(done) {
+				return
+			}
+
+			out <- data
+		}
+	}()
+
+	return out
+}
+
+func isTerminated(done In) bool {
+	if done != nil {
+		if _, ok := <-done; !ok {
+			return true
+		}
+	}
+
+	return false
 }
