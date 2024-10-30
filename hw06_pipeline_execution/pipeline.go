@@ -28,8 +28,8 @@ func executeStage(in In, done In) Out {
 	go func() {
 		defer func() {
 			close(out)
-			for len(in) > 0 {
-				<-in
+			for range in {
+				continue
 			}
 		}()
 
