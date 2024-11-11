@@ -8,7 +8,7 @@ CREATE TABLE events (
     description       TEXT,
     user_id           INTEGER NOT NULL,
     notification_time TIMESTAMP WITH TIME ZONE,
-    notify_at         TIMESTAMP WITH TIME ZONE;
+    notify_at         TIMESTAMP WITH TIME ZONE,
     created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 -- +goose StatementEnd
