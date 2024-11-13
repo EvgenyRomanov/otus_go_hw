@@ -3,6 +3,9 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
+	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage"
+	sqlstorage "github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage/sql"
 	"os"
 	"os/signal"
 	"syscall"
@@ -28,17 +31,39 @@ func main() {
 		return
 	}
 
-	config := NewConfig()
-	logg := logger.New(config.Logger.Level)
-
-	storage := memorystorage.New()
-	calendar := app.New(logg, storage)
-
-	server := internalhttp.NewServer(logg, calendar)
-
+	// init context
 	ctx, cancel := signal.NotifyContext(context.Background(),
 		syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
 	defer cancel()
+
+	config := NewConfig()
+	logg := logger.New(config.Logger.Level, os.Stdout)
+
+	var eventStorage storage.EventStorage
+
+	if config.Storage.Driver == "postgres" {
+		connectionString := fmt.Sprintf(
+			"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+			config.DB.DBHost, config.DB.DBPort, config.DB.DBUsername, config.DB.DBPassword, config.DB.DBName,
+		)
+
+		eventStorage = sqlstorage.New(connectionString, config.Storage.MigrationsPath)
+		err := eventStorage.Connect(ctx)
+		if err != nil {
+			logg.Error("cannot connect to DB server: " + err.Error())
+			cancel()
+			os.Exit(1) //nolint:gocritic
+		}
+		defer eventStorage.Close()
+	} else {
+		eventStorage = memorystorage.New()
+	}
+
+	logg.Info(fmt.Sprintf("successfully init %s storage", config.Storage.Driver))
+
+	calendar := app.New(logg, eventStorage)
+
+	server := internalhttp.NewServer(config.HTTPServer.Host, config.HTTPServer.Port, logg, calendar)
 
 	go func() {
 		<-ctx.Done()
@@ -49,6 +74,9 @@ func main() {
 		if err := server.Stop(ctx); err != nil {
 			logg.Error("failed to stop http server: " + err.Error())
 		}
+
+		logg.Info("http-server successfully terminated!")
+		os.Exit(1) //nolint:gocritic
 	}()
 
 	logg.Info("calendar is running...")
