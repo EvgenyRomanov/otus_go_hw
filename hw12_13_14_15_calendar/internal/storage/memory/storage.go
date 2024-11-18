@@ -2,11 +2,12 @@ package memorystorage
 
 import (
 	"context"
+	"sync"
+	"time"
+
 	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage"
 	"github.com/google/uuid"
 	"golang.org/x/exp/maps"
-	"sync"
-	"time"
 )
 
 type Storage struct {
@@ -105,7 +106,7 @@ func (s *Storage) GetEvents(_ context.Context) ([]*storage.Event, error) {
 	return maps.Values(s.events), nil
 }
 
-// general method for getting events by date range
+// general method for getting events by date range.
 func (s *Storage) getEventsForRange(startRange time.Time, endRange time.Time) ([]*storage.Event, error) {
 	var events []*storage.Event
 

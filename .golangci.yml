@@ -19,13 +19,22 @@ linters-settings:
           - github.com/cheggaaa/pb/v3
           - github.com/buger/jsonparser
           - github.com/spf13/pflag
+          - github.com/google/uuid
+          - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage
+          - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/http/response
+          - github.com/pressly/goose
+          - github.com/gorilla/mux
       Test:
         files:
           - $test
         allow:
           - $gostd
           - github.com/stretchr/testify
-
+          - github.com/google/uuid
+          - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage
+          - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/http/response
+          - github.com/pressly/goose
+          - github.com/gorilla/mux
 issues:
   exclude-rules:
     - path: _test\.go

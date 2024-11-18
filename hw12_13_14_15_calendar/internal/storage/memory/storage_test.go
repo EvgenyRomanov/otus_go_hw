@@ -2,13 +2,14 @@ package memorystorage
 
 import (
 	"context"
-	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage"
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 )
 
 func randomTimeGenerator() time.Time {

@@ -5,10 +5,11 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage"
-	"github.com/google/uuid"
 	"time"
 
+
+	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage"
+	"github.com/google/uuid"
 	"github.com/pressly/goose"
 )
 
@@ -243,7 +244,7 @@ func (s *Storage) GetEventByDate(ctx context.Context, eventDatetime time.Time) (
 	return &event, nil
 }
 
-// general method for getting events by date range
+// general method for getting events by date range.
 func (s *Storage) getEventsForRange(
 	ctx context.Context,
 	startRange time.Time,
