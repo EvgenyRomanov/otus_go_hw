@@ -22,8 +22,12 @@ linters-settings:
           - github.com/google/uuid
           - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage
           - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/http/response
+          - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/app
+          - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/logger
+          - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/http
           - github.com/pressly/goose
           - github.com/gorilla/mux
+          - github.com/spf13/viper
       Test:
         files:
           - $test
