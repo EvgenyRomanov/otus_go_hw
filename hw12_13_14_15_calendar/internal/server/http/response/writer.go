@@ -11,22 +11,22 @@ import (
 
 // Acts as an adapter for `http.ResponseWriter` type to store response status
 // code and size.
-type ResponseWriter struct {
+type XResponseWriter struct {
 	http.ResponseWriter
 
 	code int
 	size int
 }
 
-// Returns a new `ResponseWriter` type by decorating `http.ResponseWriter` type.
-func NewResponseWriter(w http.ResponseWriter) *ResponseWriter {
-	return &ResponseWriter{
+// Returns a new `XResponseWriter` type by decorating `http.ResponseWriter` type.
+func NewResponseWriter(w http.ResponseWriter) *XResponseWriter {
+	return &XResponseWriter{
 		ResponseWriter: w,
 	}
 }
 
 // Overrides `http.ResponseWriter` type.
-func (r *ResponseWriter) WriteHeader(code int) {
+func (r *XResponseWriter) WriteHeader(code int) {
 	if r.Code() == 0 {
 		r.code = code
 		r.ResponseWriter.WriteHeader(code)
@@ -34,7 +34,7 @@ func (r *ResponseWriter) WriteHeader(code int) {
 }
 
 // Overrides `http.ResponseWriter` type.
-func (r *ResponseWriter) Write(body []byte) (int, error) {
+func (r *XResponseWriter) Write(body []byte) (int, error) {
 	if r.Code() == 0 {
 		r.WriteHeader(http.StatusOK)
 	}
@@ -46,7 +46,7 @@ func (r *ResponseWriter) Write(body []byte) (int, error) {
 }
 
 // Overrides `http.Flusher` type.
-func (r *ResponseWriter) Flush() {
+func (r *XResponseWriter) Flush() {
 	if fl, ok := r.ResponseWriter.(http.Flusher); ok {
 		if r.Code() == 0 {
 			r.WriteHeader(http.StatusOK)
@@ -57,7 +57,7 @@ func (r *ResponseWriter) Flush() {
 }
 
 // Overrides `http.Hijacker` type.
-func (r *ResponseWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
+func (r *XResponseWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
 	hj, ok := r.ResponseWriter.(http.Hijacker)
 	if !ok {
 		return nil, nil, fmt.Errorf("the hijacker interface is not supported")
@@ -67,11 +67,11 @@ func (r *ResponseWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
 }
 
 // Returns response status code.
-func (r *ResponseWriter) Code() int {
+func (r *XResponseWriter) Code() int {
 	return r.code
 }
 
 // Returns response size.
-func (r *ResponseWriter) Size() int {
+func (r *XResponseWriter) Size() int {
 	return r.size
 }

@@ -18,7 +18,7 @@ func loggingMiddleware(next http.Handler, logger Logger) http.Handler {
 	})
 }
 
-func serverLog(logger Logger, rw *response.ResponseWriter, r *http.Request, time time.Time, latency time.Duration) {
+func serverLog(logger Logger, rw *response.XResponseWriter, r *http.Request, time time.Time, latency time.Duration) {
 	logger.Info(fmt.Sprintf(
 		"%s [%s] %s %s %s %d %s \"%s\"",
 		r.RemoteAddr,
