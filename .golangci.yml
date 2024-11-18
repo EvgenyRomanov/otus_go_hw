@@ -28,6 +28,7 @@ linters-settings:
           - github.com/pressly/goose
           - github.com/gorilla/mux
           - github.com/spf13/viper
+          - github.com/lib/pq
       Test:
         files:
           - $test
