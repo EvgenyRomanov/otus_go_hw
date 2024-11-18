@@ -10,14 +10,20 @@ build:
 run: build
 	$(BIN) -config ./configs/calendar_config.toml
 
-build-img:
+build-img-calendar:
 	docker build \
 		--build-arg=LDFLAGS="$(LDFLAGS)" \
 		-t $(DOCKER_IMG) \
-		-f build/Dockerfile .
+		-f build/calendar/Dockerfile .
 
-run-img: build-img
+run-img-calendar: build-img-calendar
 	docker run $(DOCKER_IMG)
+
+up:
+	docker compose -f "./build/docker-compose.yml" up --no-deps --build
+
+down:
+	docker compose -f "./build/docker-compose.yml" down
 
 version: build
 	$(BIN) version

@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  app-calendar:
+    container_name: otus-calendar-app
+    build:
+      dockerfile: ./build/calendar/Dockerfile
+      context: '../'
+    environment:
+      DB_HOST: db
+      STORAGE_MIGRATIONS_PATH: /etc/calendar/migrations
+      HTTP_HOST: "0.0.0.0"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    expose:
+      - 8080
+    restart: on-failure
+
+  db:
+    container_name: otus-calendar-db
+    image: postgres:14.9
+    environment:
+      POSTGRES_DB: otus-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+      TZ: Europe/Moscow
+      PGTZ: Europe/Moscow
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 4s
+      timeout: 3s
+      retries: 7
