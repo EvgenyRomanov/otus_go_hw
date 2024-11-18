@@ -8,7 +8,7 @@ import (
 	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/http/response"
 )
 
-func loggingMiddleware(next http.Handler, logger Logger) http.Handler { 
+func loggingMiddleware(next http.Handler, logger Logger) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		rw := response.NewResponseWriter(w)
 		initTime := time.Now()
