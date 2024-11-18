@@ -9,9 +9,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage"
-	sqlstorage "github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage/sql"
-
 	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/app"
 	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/logger"
 	internalhttp "github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/http"
@@ -79,7 +76,7 @@ func main() {
 		}
 
 		logg.Info("http-server successfully terminated!")
-		os.Exit(1) 
+		os.Exit(1)
 	}()
 
 	logg.Info("calendar is running...")
@@ -87,6 +84,6 @@ func main() {
 	if err := server.Start(ctx); err != nil {
 		logg.Error("failed to start http server: " + err.Error())
 		cancel()
-		os.Exit(1) 
+		os.Exit(1)
 	}
 }
