@@ -10,7 +10,6 @@ import (
 	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage"
 	"github.com/google/uuid"
 	"github.com/pressly/goose"
-	"time"
 )
 
 type Storage struct {
