@@ -48,6 +48,8 @@ issues:
         - dupl
         - gocyclo
         - gosec
+  exclude-dirs:
+    - ../../../../go
 
 linters:
   disable-all: true
