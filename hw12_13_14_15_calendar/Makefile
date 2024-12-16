@@ -8,22 +8,28 @@ build:
 	go build -v -o $(BIN) -ldflags "$(LDFLAGS)" ./cmd/calendar
 
 run: build
-	$(BIN) -config ./configs/config.toml
+	$(BIN) -config ./configs/calendar_config.toml
 
-build-img:
+build-img-calendar:
 	docker build \
 		--build-arg=LDFLAGS="$(LDFLAGS)" \
 		-t $(DOCKER_IMG) \
-		-f build/Dockerfile .
+		-f build/calendar/Dockerfile .
 
-run-img: build-img
+run-img-calendar: build-img-calendar
 	docker run $(DOCKER_IMG)
+
+up:
+	docker compose -f "./build/docker-compose.yml" up --no-deps --build
+
+down:
+	docker compose -f "./build/docker-compose.yml" down
 
 version: build
 	$(BIN) version
 
 test:
-	go test -race ./internal/... ./pkg/...
+	go test -race ./internal/...
 
 install-lint-deps:
 	(which golangci-lint > /dev/null) || curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v1.57.2
@@ -32,3 +38,4 @@ lint: install-lint-deps
 	golangci-lint run ./...
 
 .PHONY: build run build-img run-img version test lint
+

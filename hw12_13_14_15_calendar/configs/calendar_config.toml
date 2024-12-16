@@ -1,0 +1,18 @@
+[logger]
+level = "INFO"
+path = "./logs/calendar.log"
+
+[storage]
+driver = "postgres"              #[memory|postgres]
+migrations_path = "./migrations"
+
+[db]
+host = "localhost"
+port = 5432
+name = "otus-db"
+username = "postgres"
+password = "postgres"
+
+[http]
+host = "localhost"
+port = 8080
