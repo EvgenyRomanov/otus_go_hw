@@ -25,6 +25,14 @@ up:
 down:
 	docker compose -f "./build/docker-compose.yml" down
 
+generate:
+	rm -rf internal/server/pb/* && \
+	protoc \
+        --proto_path=api/ \
+        --go_out=internal/server/pb \
+        --go-grpc_out=internal/server/pb \
+        api/*.proto
+
 version: build
 	$(BIN) version
 

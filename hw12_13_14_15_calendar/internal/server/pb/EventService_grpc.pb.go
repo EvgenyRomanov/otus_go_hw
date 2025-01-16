@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.21.12
-// source: api/EventService.proto
+// source: EventService.proto
 
 package pb
 
@@ -384,5 +384,5 @@ var CalendarService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/EventService.proto",
+	Metadata: "EventService.proto",
 }
