@@ -51,6 +51,7 @@ issues:
   exclude-dirs:
     - ../../../../go
     - ../../../../../../opt/hostedtoolcache/go
+    - hw12_13_14_15_calendar/internal/server/pb
 
 linters:
   disable-all: true
