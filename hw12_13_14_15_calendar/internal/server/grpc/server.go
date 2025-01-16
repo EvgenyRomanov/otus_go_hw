@@ -4,16 +4,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"google.golang.org/grpc/reflection"
-	"google.golang.org/protobuf/types/known/emptypb"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"net"
+	"time"
 
 	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/pb"
 	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
-	"time"
+	"google.golang.org/grpc/reflection"
+	"google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 var ErrWrongEventUUIDArgument = errors.New("cannot parse event id argument to UUID")
@@ -91,7 +91,7 @@ func (s *Server) Stop() {
 	s.server.GracefulStop()
 }
 
-// helper for getting event UUID from request
+// helper for getting event UUID from request.
 func (s *Server) parseRequestAndGetUUID(uuidString string) (uuid.UUID, error) {
 	eventUUID, err := uuid.Parse(uuidString)
 	if err != nil {

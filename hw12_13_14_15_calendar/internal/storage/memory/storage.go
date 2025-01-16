@@ -107,7 +107,10 @@ func (s *Storage) GetEvents(_ context.Context) ([]*storage.Event, error) {
 }
 
 // general method for getting events by date range.
-func (s *Storage) getEventsForRange(startRange time.Time, endRange time.Time) ([]*storage.Event, error) {
+func (s *Storage) getEventsForRange(
+	startRange time.Time,
+	endRange time.Time,
+) ([]*storage.Event, error) { //nolint:unparam
 	var events []*storage.Event
 
 	for _, event := range s.events {

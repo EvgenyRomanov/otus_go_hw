@@ -52,7 +52,7 @@ func main() {
 		eventStorage = sqlstorage.New(connectionString, config.Storage.MigrationsPath)
 		err := eventStorage.Connect(ctx)
 		if err != nil {
-			logg.Error("cannot connect to DB server: " + err.Error())
+			logg.Error("%s", "cannot connect to DB server: "+err.Error())
 			cancel()
 			os.Exit(1) //nolint:gocritic
 		}
@@ -61,7 +61,7 @@ func main() {
 		eventStorage = memorystorage.New()
 	}
 
-	logg.Info(fmt.Sprintf("successfully init %s storage", config.Storage.Driver))
+	logg.Info("%s", fmt.Sprintf("successfully init %s storage", config.Storage.Driver))
 
 	calendar := app.New(logg, eventStorage)
 
@@ -75,7 +75,7 @@ func main() {
 		defer cancel()
 
 		if err := httpServer.Stop(ctx); err != nil {
-			logg.Error("failed to stop http server: " + err.Error())
+			logg.Error("%s", "failed to stop http server: "+err.Error())
 		}
 
 		logg.Info("http-server successfully terminated!")
@@ -93,14 +93,14 @@ func main() {
 
 	go func() {
 		if err := httpServer.Start(ctx); err != nil {
-			logg.Error("failed to start http server: " + err.Error())
+			logg.Error("%s", "failed to start http server: "+err.Error())
 			wg.Done()
 		}
 	}()
 
 	go func() {
 		if err := grpcServer.Start(ctx); err != nil {
-			logg.Error("failed to start grpc server: " + err.Error())
+			logg.Error("%s", "failed to start grpc server: "+err.Error())
 			wg.Done()
 		}
 	}()

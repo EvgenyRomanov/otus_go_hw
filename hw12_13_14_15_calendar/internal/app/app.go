@@ -2,9 +2,10 @@ package app
 
 import (
 	"context"
+	"time"
+
 	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage"
 	"github.com/google/uuid"
-	"time"
 )
 
 type App struct {

@@ -3,12 +3,12 @@ package grpc
 import (
 	"context"
 	"fmt"
+	"time"
+
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
 	"google.golang.org/grpc/status"
-
-	"google.golang.org/grpc"
-	"time"
 )
 
 type LoggingInterceptor struct {
