@@ -25,6 +25,8 @@ linters-settings:
           - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/app
           - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/logger
           - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/http
+          - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/pb
+          - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/grpc
           - github.com/pressly/goose
           - github.com/gorilla/mux
           - github.com/spf13/viper
@@ -51,6 +53,7 @@ issues:
   exclude-dirs:
     - ../../../../go
     - ../../../../../../opt/hostedtoolcache/go
+    - hw12_13_14_15_calendar/internal/server/pb
 
 linters:
   disable-all: true

@@ -25,6 +25,14 @@ up:
 down:
 	docker compose -f "./build/docker-compose.yml" down
 
+generate:
+	rm -rf internal/server/pb/* && \
+	protoc \
+        --proto_path=api/ \
+        --go_out=internal/server/pb \
+        --go-grpc_out=internal/server/pb \
+        api/*.proto
+
 version: build
 	$(BIN) version
 
@@ -32,7 +40,7 @@ test:
 	go test -race ./internal/...
 
 install-lint-deps:
-	(which golangci-lint > /dev/null) || curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v1.57.2
+	(which golangci-lint > /dev/null) || curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v1.63.4
 
 lint: install-lint-deps
 	golangci-lint run ./...
