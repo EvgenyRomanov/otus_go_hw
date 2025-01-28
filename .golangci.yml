@@ -27,6 +27,9 @@ linters-settings:
           - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/http
           - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/pb
           - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/grpc
+          - github.com/cenkalti/backoff
+          - github.com/streadway/amqp
+          - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/pkg/rmq
           - github.com/pressly/goose
           - github.com/gorilla/mux
           - github.com/spf13/viper
