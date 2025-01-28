@@ -33,7 +33,7 @@ func New(
 }
 
 func (s *Sender) Consume(ctx context.Context) error {
-	return s.rmq.Handle(ctx, s.worker, s.threads)
+	return s.rmq.Consume(ctx, s.worker, s.threads)
 }
 
 func (s *Sender) worker(ctx context.Context, ch <-chan amqp.Delivery) {

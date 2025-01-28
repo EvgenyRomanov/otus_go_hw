@@ -54,8 +54,10 @@ func main() {
 
 	var wg sync.WaitGroup
 
-	// TODO wg.Add(1)
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
+
 		<-ctx.Done()
 
 		_, cancel := context.WithTimeout(context.Background(), time.Second*3)
@@ -66,17 +68,16 @@ func main() {
 		}
 
 		logg.Info("RMQ server successfully terminated!")
-
-		wg.Done()
 	}()
 
 	sender := sender.New(logg, rmqInstance, config.Sender.Threads)
 
 	wg.Add(1)
 	go func() {
+		defer wg.Done()
+
 		err := sender.Consume(ctx)
 		if err != nil {
-			wg.Done()
 			logg.Error("cannot init consumer for AMQP server: %s", err.Error())
 		}
 	}()

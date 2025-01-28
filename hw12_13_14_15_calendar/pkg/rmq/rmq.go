@@ -78,7 +78,7 @@ func (r *Rmq) Connect() error {
 	return nil
 }
 
-func (r *Rmq) Handle(ctx context.Context, worker Worker, threads int) error {
+func (r *Rmq) Consume(ctx context.Context, worker Worker, threads int) error {
 	messages, err := r.consume()
 	if err != nil {
 		return errors.Join(ErrGeneralError, err)

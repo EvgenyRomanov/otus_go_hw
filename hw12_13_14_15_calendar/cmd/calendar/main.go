@@ -68,7 +68,12 @@ func main() {
 	httpServer := internalhttp.NewServer(config.HTTPServer.Host, config.HTTPServer.Port, logg, calendar)
 	grpcServer := grpc.NewServer(config.GRPCServer.Host, config.GRPCServer.Port, logg, calendar)
 
+	var wg sync.WaitGroup
+
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
+
 		<-ctx.Done()
 
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
@@ -82,28 +87,26 @@ func main() {
 
 		grpcServer.Stop()
 		logg.Info("grpc-server successfully terminated!")
+	}()
 
-		os.Exit(1)
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		if err := httpServer.Start(ctx); err != nil {
+			logg.Error("%s", "failed to start http server: "+err.Error())
+		}
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		if err := grpcServer.Start(ctx); err != nil {
+			logg.Error("%s", "failed to start grpc server: "+err.Error())
+		}
 	}()
 
 	logg.Info("calendar is running...")
-
-	var wg sync.WaitGroup
-	wg.Add(2)
-
-	go func() {
-		if err := httpServer.Start(ctx); err != nil {
-			logg.Error("%s", "failed to start http server: "+err.Error())
-			wg.Done()
-		}
-	}()
-
-	go func() {
-		if err := grpcServer.Start(ctx); err != nil {
-			logg.Error("%s", "failed to start grpc server: "+err.Error())
-			wg.Done()
-		}
-	}()
-
 	wg.Wait()
 }
