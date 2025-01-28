@@ -15,5 +15,5 @@ CREATE TABLE events (
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE IF EXISTS event;
+DROP TABLE IF EXISTS events;
 -- +goose StatementEnd
