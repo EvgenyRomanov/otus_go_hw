@@ -21,7 +21,7 @@ var (
 	ErrPublish       = errors.New("AMQP publish error")
 )
 
-// Rmq consumer
+// Rmq consumer.
 type Rmq struct {
 	conn        *amqp.Connection
 	channel     *amqp.Channel
@@ -101,7 +101,6 @@ func (r *Rmq) Handle(ctx context.Context, worker Worker, threads int) error {
 	}
 }
 
-// TODO
 func (r *Rmq) Shutdown() error {
 	// will close() the deliveries channel
 	if err := r.channel.Cancel(r.consumerTag, true); err != nil {
@@ -161,7 +160,7 @@ func (r *Rmq) connect() error {
 	return nil
 }
 
-// задекларировать очередь, которую будем слушать
+// задекларировать очередь, которую будем слушать.
 func (r *Rmq) announceQueue() error {
 	queue, err := r.channel.QueueDeclare(
 		r.queue,
@@ -236,7 +235,6 @@ func (r *Rmq) reConnect(ctx context.Context) error {
 				continue
 			}
 			err := r.announceQueue()
-
 			if err != nil {
 				fmt.Printf("Couldn't connect: %+v", err)
 				continue

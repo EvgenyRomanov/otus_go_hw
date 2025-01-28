@@ -4,14 +4,15 @@ import (
 	"context"
 	"errors"
 	"flag"
-	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/app/sender"
-	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/logger"
-	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/pkg/rmq"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/app/sender"
+	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/logger"
+	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/pkg/rmq"
 )
 
 var configFile string
@@ -47,7 +48,7 @@ func main() {
 
 	err := rmqInstance.Connect()
 	if err != nil {
-		logg.Error("cannot connect to AMQP server: " + err.Error())
+		logg.Error("%s", "cannot connect to AMQP server: "+err.Error())
 		return
 	}
 
@@ -61,7 +62,7 @@ func main() {
 		defer cancel()
 
 		if err := rmqInstance.Shutdown(); err != nil && !errors.Is(err, rmq.ErrChannelClosed) {
-			logg.Error("failed to shutdown RMQ server: " + err.Error())
+			logg.Error("%s", "failed to shutdown RMQ server: "+err.Error())
 		}
 
 		logg.Info("RMQ server successfully terminated!")

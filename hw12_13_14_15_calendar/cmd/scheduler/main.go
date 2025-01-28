@@ -5,17 +5,18 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"os"
+	"os/signal"
+	"sync"
+	"syscall"
+	"time"
+
 	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/app/scheduler"
 	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/logger"
 	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage"
 	memorystorage "github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage/memory"
 	sqlstorage "github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage/sql"
 	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/pkg/rmq"
-	"os"
-	"os/signal"
-	"sync"
-	"syscall"
-	"time"
 )
 
 var configFile string
@@ -60,7 +61,7 @@ func main() {
 		eventStorage = memorystorage.New()
 	}
 
-	logg.Info(fmt.Sprintf("successfully init %s storage", config.Storage.Driver))
+	logg.Info("%s", fmt.Sprintf("successfully init %s storage", config.Storage.Driver))
 
 	rmqInstance := rmq.NewRmq(
 		config.Rmq.ConsumerTag,
@@ -74,7 +75,7 @@ func main() {
 
 	err := rmqInstance.Connect()
 	if err != nil {
-		logg.Error("cannot connect to AMQP server: " + err.Error())
+		logg.Error("%s", "cannot connect to AMQP server: "+err.Error())
 		return
 	}
 
@@ -88,7 +89,7 @@ func main() {
 		defer cancel()
 
 		if err := rmqInstance.Shutdown(); err != nil && !errors.Is(err, rmq.ErrChannelClosed) {
-			logg.Error("failed to shutdown RMQ server: " + err.Error())
+			logg.Error("%s", "failed to shutdown RMQ server: "+err.Error())
 		}
 
 		logg.Info("RMQ server successfully terminated!")

@@ -2,6 +2,7 @@ package sender
 
 import (
 	"context"
+
 	"github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/pkg/rmq"
 	"github.com/streadway/amqp"
 )
