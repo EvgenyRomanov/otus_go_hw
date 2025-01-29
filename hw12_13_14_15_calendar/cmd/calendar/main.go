@@ -81,9 +81,9 @@ func main() {
 
 		if err := httpServer.Stop(ctx); err != nil {
 			logg.Error("%s", "failed to stop http server: "+err.Error())
+		} else {
+			logg.Info("http-server successfully terminated!")
 		}
-
-		logg.Info("http-server successfully terminated!")
 
 		grpcServer.Stop()
 		logg.Info("grpc-server successfully terminated!")

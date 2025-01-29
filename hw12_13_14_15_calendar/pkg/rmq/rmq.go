@@ -92,10 +92,14 @@ func (r *Rmq) Consume(ctx context.Context, worker Worker, threads int) error {
 		select {
 		case <-ctx.Done():
 			return nil
-		case <-r.done:
-			err = r.reConnect(ctx)
-			if err != nil {
-				return errors.Join(ErrReconnection, err)
+		case err, ok := <-r.done:
+			if ok && err != nil && errors.Is(err, ErrChannelClosed) {
+				err = r.reConnect(ctx)
+				if err != nil {
+					return errors.Join(ErrReconnection, err)
+				}
+			} else {
+				return nil
 			}
 		}
 	}
@@ -111,7 +115,7 @@ func (r *Rmq) Shutdown() error {
 		return errors.Join(ErrClose, err)
 	}
 
-	return <-r.done
+	return nil
 }
 
 func (r *Rmq) Publish(msg amqp.Publishing) error {
@@ -140,9 +144,13 @@ func (r *Rmq) connect() error {
 	}
 
 	go func() {
-		<-r.conn.NotifyClose(make(chan *amqp.Error))
-		// канал сообщений закрыт => пересоздем соединение
-		r.done <- ErrChannelClosed
+		_, ok := <-r.conn.NotifyClose(make(chan *amqp.Error))
+		// восстановить подключение после ошибки
+		if ok {
+			r.done <- ErrChannelClosed
+		} else {
+			r.done <- nil
+		}
 	}()
 
 	if err = r.channel.ExchangeDeclare(

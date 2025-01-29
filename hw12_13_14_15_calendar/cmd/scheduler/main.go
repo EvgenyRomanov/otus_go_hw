@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -90,11 +89,11 @@ func main() {
 		_, cancel := context.WithTimeout(context.Background(), time.Second*3)
 		defer cancel()
 
-		if err := rmqInstance.Shutdown(); err != nil && !errors.Is(err, rmq.ErrChannelClosed) {
+		if err := rmqInstance.Shutdown(); err != nil {
 			logg.Error("%s", "failed to shutdown RMQ server: "+err.Error())
+		} else {
+			logg.Info("RMQ server successfully terminated!")
 		}
-
-		logg.Info("RMQ server successfully terminated!")
 	}()
 
 	scheduler := scheduler.New(
