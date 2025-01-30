@@ -347,7 +347,7 @@ func (s *Storage) GetEventsForNotifications(ctx context.Context) ([]*storage.Eve
 }
 
 func (s *Storage) DeleteOldEvents(ctx context.Context, duration time.Duration) (int, error) {
-	query := fmt.Sprintf("DELETE FROM event WHERE date_time < NOW() - INTERVAL '%d hours'", int(duration.Hours()))
+	query := fmt.Sprintf("DELETE FROM events WHERE date_time < NOW() - INTERVAL '%d hours'", int(duration.Hours()))
 
 	res, err := s.DB.ExecContext(ctx, query)
 	if err != nil {
