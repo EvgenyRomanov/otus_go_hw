@@ -43,6 +43,9 @@ linters-settings:
           - github.com/google/uuid
           - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/storage
           - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/http/response
+          - github.com/EvgenyRomanov/otus_go_hw/hw12_13_14_15_calendar/internal/server/pb
+          - github.com/golang/protobuf/ptypes/timestamp
+          - github.com/lib/pq
           - github.com/pressly/goose
           - github.com/gorilla/mux
 issues:
